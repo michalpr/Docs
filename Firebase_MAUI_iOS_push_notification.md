@@ -1,18 +1,19 @@
+
 ## .NET MAUI Push Notification for iOS
 Follow manual below to enable **Firebase** Cloud Messaging for .NET **MAUI** project on **iOS** platform.
 ### Preparation
-I consider you have set up the Apple Provisioning profile properly. This means you set up Certificate, Identifier and Profile (especially Distribution - App Store) on [Apple Developer Site](developer.apple.com/account/resources). Do not forget to enable "Push Notification" on Identifier page of your application and use the same Bundle ID as you are using in your app. On Keys page [configure the APN Key](https://www.kodeco.com/20201639-firebase-cloud-messaging-for-ios-push-notifications#toc-anchor-003) - check Apple Push Notifications service (APNs) - download it and remember Key ID. You will need it in the [Firebase Console](https://console.firebase.google.com).
+I consider you have set up the Apple provisioning profile properly. This means you set up *Certificate*, *Identifier* and *Profile* (especially *Distribution - App Store*) on [Apple Developer Site](developer.apple.com/account/resources). Do not forget to enable "Push Notification" on *Identifier page* of your application and use the same *Bundle ID* as you are using in your app. On *Keys* page [configure the APN Key](https://www.kodeco.com/20201639-firebase-cloud-messaging-for-ios-push-notifications#toc-anchor-003) - check "Apple Push Notifications service (APNs)" - download it and remember *Key ID*. You will need it in the [Firebase Console](https://console.firebase.google.com).
 
-I also consider all preparation work on Firebase Console is done according to [manual](https://support.google.com/firebase/answer/7015592#ios) and you have the GoogleService-Info.plist file ready (but not added to your project). Do not forget to [register APNs Authentication Key](https://firebase.google.com/docs/cloud-messaging/ios/client#upload_your_apns_authentication_key) on page Project setting, tab "Cloud Messaging", part "Apple app configuration".
+I also consider all preparation work on *Firebase Console* is done according to [manual](https://support.google.com/firebase/answer/7015592#ios) and you have the GoogleService-Info.plist file ready (but not added to your project). Do not forget to [register APNs Authentication Key](https://firebase.google.com/docs/cloud-messaging/ios/client#upload_your_apns_authentication_key) on page *Project setting*, tab "Cloud Messaging", part "Apple app configuration".
 ### Project changes
 Having all this done let's open solution with MAUI project in **Visual Studio 2022**. In my case version 17.3.6, .NET SDK 6.0.402, MAUI workload 6.0.541, build server macOS Monterey 12.6 with Xcode 14.0.1.
 
-Check target iOS Framework is "net6.0-ios15.4" and then add nuget package "Xamarin.Firebase.iOS.CloudMessaging" version 8.10.0.2 in traditional way using Nuget Package Manager.
+Check "Target iOS Framework" in project properties is set to "net6.0-ios15.4" and then add nuget package "Xamarin.Firebase.iOS.CloudMessaging" version 8.10.0.2 in traditional way using *Nuget Package Manager*.
 
 You can run into an issue with a long path. Package installation might fail with exception 
 "System.IO.DirectoryNotFoundException: Could not find a part of the path 'C:\Users\\...\\.nuget\packages\xamarin.firebase.ios.installations\\...\\FirebaseInstallations-umbrella.h'."
-But you can solve it by adding Nuget.config file into solution folder with this content:
-```
+But you can solve it by adding *Nuget.config* file into solution folder with this content:
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <config>
@@ -22,8 +23,8 @@ But you can solve it by adding Nuget.config file into solution folder with this 
 </configuration>
 ```
 
-Add Entitlements.plist file into Platforms\iOS folder with this content:
-```
+Add *Entitlements.plist* file into Platforms\iOS folder with this content:
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -33,23 +34,23 @@ Add Entitlements.plist file into Platforms\iOS folder with this content:
 </dict>
 </plist>
 ```
-Add into Info.plist file these rows:
-```
+Add into *Info.plist* file these rows:
+```xml
 <key>UIBackgroundModes</key>
 <array>
 	<string>remote-notification</string>
 </array>
 ```
-You can add into project file these lines:
-```
+You can include generated *GoogleService-Info.plist* by adding these lines into project file:
+```xml
 <ItemGroup Condition="'$(TargetFramework)'=='net6.0-ios15.4'">
 	<BundleResource Include="Platforms\iOS\GoogleService-Info.plist" />
 </ItemGroup>
 ```
-... and let the Firebase package to read settings from generated GoogleService-Info.plist but let's keep it simpler and do not add this file to project.
+... and let the Firebase package to read settings from it but let's keep it simpler and do not add this file to project.
 
 Instead, change file Platforms\iOS\\**AppDelegate.cs** like this:
-```
+```csharp
 using Firebase.CloudMessaging;
 using Foundation;
 using UIKit;
@@ -166,13 +167,13 @@ public class AppDelegate : MauiUIApplicationDelegate, IUNUserNotificationCenterD
     }
 }
 ```
-... and change Options values to correct ones from your GoogleService-Info.plist file...
+... and change *Options* values to correct ones from your *GoogleService-Info.plist* file...
 ### Build
 Now, we can build the project!
 
-Beware, Firebase iOS CloudMessaging works **only in Release mode**. In Debug mode Configure method fails with message "Could not create an native instance of the type 'Firebase.Core.Options': the native class hasn't been loaded", no matter you test on physical device with properly set manual Provisioning profile. So, we can test messaging using TestFlight or AdHoc distribution only.
+Beware, Firebase iOS CloudMessaging works **only in Release mode**. In Debug mode `Configure` method fails with message "Could not create an native instance of the type 'Firebase.Core.Options': the native class hasn't been loaded", no matter you test on physical device with properly set manual Provisioning profile. So, we can test messaging using *TestFlight* or *AdHoc* distribution only.
 ### Test
-The easiest way for sending test notification messages is to use Firebase Console. Just open Cloud Messaging in Engage menu and tap "Send your first message" button. Fill in "Notification text" field and tap "Send test message", fill in token in field "Add an FCM registration token" (you got it from log file of your iOS app) and tap "Test" button.
+The easiest way for sending test notification messages is to use *Firebase Console*. Just open *Cloud Messaging* item in *Engage* menu and tap "Send your first message" button. Fill in "Notification text" field and tap "Send test message", fill in token in field "Add an FCM registration token" (you got it from log file of your iOS app) and tap "Test" button.
 ### Recommended links
 - [FirebasePushNotificationPlugin - Firebase Setup](https://github.com/CrossGeeks/FirebasePushNotificationPlugin/blob/master/docs/FirebaseSetup.md)
 - [GoogleApisForiOSComponents - Firebase Cloud Messaging on iOS](https://github.com/xamarin/GoogleApisForiOSComponents/blob/main/docs/Firebase/CloudMessaging/GettingStarted.md)
