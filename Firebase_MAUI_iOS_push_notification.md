@@ -167,12 +167,12 @@ public class AppDelegate : MauiUIApplicationDelegate, IUNUserNotificationCenterD
     }
 }
 ```
-... and change *Options* values to correct ones from your *GoogleService-Info.plist* file...
-### Build
+... and change `Options` values to correct ones from your *GoogleService-Info.plist* file...
+### Build and test
 Now, we can build the project!
 
 Beware, Firebase iOS CloudMessaging works **only in Release mode**. In Debug mode `Configure` method fails with message "Could not create an native instance of the type 'Firebase.Core.Options': the native class hasn't been loaded", no matter you test on physical device with properly set manual Provisioning profile. So, we can test messaging using *TestFlight* or *AdHoc* distribution only.
-### Test
+
 The easiest way for sending test notification messages is to use *Firebase Console*. Just open *Cloud Messaging* item in *Engage* menu and tap "Send your first message" button. Fill in "Notification text" field and tap "Send test message", fill in token in field "Add an FCM registration token" (you got it from log file of your iOS app) and tap "Test" button.
 ### Recommended links
 - [FirebasePushNotificationPlugin - Firebase Setup](https://github.com/CrossGeeks/FirebasePushNotificationPlugin/blob/master/docs/FirebaseSetup.md)
