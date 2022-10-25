@@ -1,10 +1,10 @@
 
 ## .NET MAUI Push Notification for iOS
-Follow manual below to enable **Firebase** Cloud Messaging for .NET **MAUI** project on **iOS** platform.
+Follow the tutorial below to enable **Firebase** Cloud Messaging for .NET **MAUI** project on **iOS** platform.
 ### Preparation
 I consider you have set up the Apple provisioning profile properly. This means you set up *Certificate*, *Identifier* and *Profile* (especially *Distribution - App Store*) on [Apple Developer Site](developer.apple.com/account/resources). Do not forget to enable "Push Notification" on *Identifier page* of your application and use the same *Bundle ID* as you are using in your app. On *Keys* page [configure the APN Key](https://www.kodeco.com/20201639-firebase-cloud-messaging-for-ios-push-notifications#toc-anchor-003) - check "Apple Push Notifications service (APNs)" - download it and remember *Key ID*. You will need it in the [Firebase Console](https://console.firebase.google.com).
 
-I also consider all preparation work on *Firebase Console* is done according to [manual](https://support.google.com/firebase/answer/7015592#ios) and you have the GoogleService-Info.plist file ready (but not added to your project). Do not forget to [register APNs Authentication Key](https://firebase.google.com/docs/cloud-messaging/ios/client#upload_your_apns_authentication_key) on page *Project setting*, tab "Cloud Messaging", part "Apple app configuration".
+I also consider all preparation work on *Firebase Console* is done according to [tutorial](https://support.google.com/firebase/answer/7015592#ios) and you have the GoogleService-Info.plist file ready (but not added to your project). Do not forget to [register APNs Authentication Key](https://firebase.google.com/docs/cloud-messaging/ios/client#upload_your_apns_authentication_key) on page *Project setting*, tab "Cloud Messaging", part "Apple app configuration".
 ### Project changes
 Having all this done let's open solution with MAUI project in **Visual Studio 2022**. In my case version 17.3.6, .NET SDK 6.0.402, MAUI workload 6.0.541, build server macOS Monterey 12.6 with Xcode 14.0.1.
 
